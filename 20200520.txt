@@ -1,0 +1,57 @@
+#아파치 설치
+1. 다운로드
+wget http://apache.tt.co.kr//httpd/httpd-2.4.43.tar.gz
+2. 압축해제
+tar zxvf httpd-2.4.43.tar.gz
+
+3. source compile
+./configure --prefix=/server/httpd --sysconfdir=/server/conf/httpd && make && make install && echo $?
+
+4. 설정
+vi /server/conf/httpd/httpd.conf
+196	ServerName	10.0.0.30:80
+
+5. 실행
+cd /server/httpd/bin으로 이동후
+./httpd &
+
+6. 방화벽해제
+firewall-cmd --add-service=http --permanent
+firewall-cmd --reload
+
+
+7. 확인
+인터넷 주소창에 본인 서버의 IP입력
+
+=============== Systemd에 데몬을 로드 ====================
+vi /usr/lib/systemd/system/httpd.serivce
+[Unit]
+Description=Apache HTTP Server
+After=network.target
+
+[Service]
+Type= forking
+ExecStart = /server/httpd/bin/apachectl start
+ExecStop = /server/httpd/bin/apachectl stop
+
+[Install]
+WantedBy=multi-user.target
+
+
+systemctl daemon-reload
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

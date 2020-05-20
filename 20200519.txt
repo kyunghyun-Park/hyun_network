@@ -1,0 +1,49 @@
+vi /etc/sysconfig/network-scripts/ifcfg-[NIC카드이름]
+ex) vi /etc/sysconfig/network-scripts/ifcfg-ens33
+
+
+GCC설치(rpm)
+rpm -ivh gcc-4.8.5-39.el7.x86_64.rpm    => 의존성 에러
+rpm -ivh cpp-4.8.5-39.el7.x86_64.rpm    -> 의존성 에러
+rpm -ivh libmpc-1.0.1-3.el7.x86_64.rpm  => 의존성 에러
+ls | grep mpfr  => mpfr라이브러리 설치패키지 이름 확인
+rpm -ivh mpfr-3.1.1-4.el7.x86_64.rpm    => 설치
+rpm -ivh libmpc-1.0.1-3.el7.x86_64.rpm  => 설치
+rpm -ivh cpp-4.8.5-39.el7.x86_64.rpm     => 설치
+rpm -ivh glibc-devel-2.17-292.el7.x86_64.rpm =>의존성에러
+rpm -ivh glibc-headers-2.17-292.el7.x86_64.rpm   => 의존성에러
+rpm -ivh kernel-headers-3.10.0-1062.el7.x86_64.rpm   => 설치
+rpm -ivh glibc-headers-2.17-292.el7.x86_64.rpm   => 설치
+rpm -ivh glibc-devel-2.17-292.el7.x86_64.rpm    => 설치
+rpm -ivh gcc-4.8.5-39.el7.x86_64.rpm   => GCC설치 완료!!
+
+#Proftpd 설치
+yum -y install wget
+
+proftpd.org 접속 -> 링크주소 복사
+wget ftp://ftp.proftpd.org/distrib/source/proftpd-1.3.6c.tar.gz
+
+tar zxvf proftpd-1.3.6c.tar.gz
+
+./configure \
+--prefix=/server/proftpd \
+--sysconfdir=/server/conf/proftpd && make && make install && echo $?
+
+vi /server/conf/proftpd/proftpd.conf
+         9 DefaultAddress                  10.0.0.30
+       30 Group                           nobody
+
+cd /server/proftpd/sbin/
+./proftpd &
+
+firewall-cmd --add-service=ftp --permanent
+firewall-cmd --reload
+
+useradd ftptest
+passwd ftptest
+
+cmd -> ftp -> o 10.0.0.x  -> ID/PW입력 -> 끝!!!
+
+
+
+
